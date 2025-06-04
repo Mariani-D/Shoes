@@ -4,9 +4,21 @@
     <img :src="images[current]" alt="Sneaker" />
     <button @click="nextImage">Próximo</button>
   </div>
+
+  <!-- Lista de modelos retornados do backend -->
+  <div>
+    <h3>Modelos Disponíveis:</h3>
+    <ul>
+      <li v-for="modelo in modelos" :key="modelo.modeloid">
+        {{ modelo.modelonome }} - R$ {{ modelo.modelopreco }} ({{ modelo.marcanome }})
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: "SliderImg",
   data() {
@@ -17,6 +29,8 @@ export default {
         'https://images.contentstack.io/v3/assets/bltd427b71c2e191abd/bltfa47e5ab003c30f1/67aed4130b17d71b87055cb1/1052A069_111_SB_FR_GLB.png_-_Web_Rendition_(1).png',
         'https://ostoresneakers.vteximg.com.br/arquivos/ids/222923-1000-1000/Converse-Weapon-Leather-A10342C-3.jpg?v=638608997429000000',
       ],
+      modelos: [],
+      url: 'http://localhost:3000/marca',
     };
   },
   methods: {
@@ -26,6 +40,18 @@ export default {
     prevImage() {
       this.current = (this.current - 1 + this.images.length) % this.images.length;
     },
+    async pegaTenis() {
+      try {
+        const resp = await axios.get(this.url);
+        this.modelos = resp.data;
+        console.log(this.modelos);
+      } catch (error) {
+        console.error("Erro ao buscar modelos:", error);
+      }
+    },
+  },
+  mounted() {
+    this.pegaTenis();
   },
 };
 </script>
@@ -36,6 +62,7 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  margin-bottom: 20px;
 }
 img {
   max-width: 400px;
@@ -49,5 +76,12 @@ button {
   padding: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 5px;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  margin-bottom: 8px;
 }
 </style>

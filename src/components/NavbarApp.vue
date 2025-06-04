@@ -7,14 +7,18 @@
 </template>
 
 <script>
+
 export default {
   name: "NavBar",
   data() {
     return {
       brands: ["Adidas", "Asics", "Converse", "Mizuno", "New Balance", "Nike", "Puma", "Under Armour"],
     };
+    
   },
+ 
 };
+
 </script>
 
 <style scoped>
